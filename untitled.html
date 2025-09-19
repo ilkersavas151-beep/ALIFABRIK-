@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ALIFABRIK VİDEO ASİSTANI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+:root{ --bg:#000; --panel:#0f1115; --ink:#f8f8f8; --muted:#b9b9b9; --brand1:#f4d27e; --brand2:#b6862e; --line:rgba(244,210,126,.25); }
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,Arial;background:radial-gradient(1600px 600px at 50% -10%,rgba(244,210,126,.10),transparent 60%),linear-gradient(180deg,#000,#0a0c10);color:var(--ink)}
+.wrap{max-width:920px;margin:0 auto;padding:16px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:16px;margin-top:16px}
+label{font-size:14px;color:var(--muted)}
+input[type=file],select{width:100%;border:1px solid var(--line);border-radius:12px;background:#0b0d11;color:var(--ink);padding:12px}
+.btn{appearance:none;border:1px solid var(--line);background:linear-gradient(180deg,var(--brand1),var(--brand2));color:#151515;border-radius:14px;padding:12px 18px;font-weight:900;cursor:pointer;letter-spacing:.2px;min-width:120px}
+.btn[disabled]{opacity:.6;cursor:not-allowed}
+.btn.ghost{background:rgba(255,255,255,.06);color:var(--ink);border:1px solid var(--line);font-weight:700}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.video{width:100%;min-height:260px;border-radius:16px;background:#0b0d11;border:1px dashed var(--line)}
+.note{font-size:12px;color:var(--muted)}
+
+/* Banner */
+.banner{position:relative;display:flex;align-items:center;gap:18px;padding:22px 24px;border:1px solid var(--line);border-radius:24px;
+background:
+  radial-gradient(300px 150px at 15% 0%,rgba(255,255,255,.14),transparent 60%),
+  linear-gradient(180deg,rgba(244,210,126,.12),rgba(15,17,21,.8));
+box-shadow:0 50px 140px rgba(244,210,126,.10), inset 0 0 50px rgba(255,255,255,.05)}
+.title{font-weight:900;font-size:38px;letter-spacing:.8px;color:var(--brand1);text-shadow:0 1px 0 #000, 0 0 42px rgba(244,210,126,.38)}
+/* Shine effect */
+.banner:before{content:"";position:absolute;inset:0;border-radius:24px;background:linear-gradient(120deg,transparent 40%,rgba(255,255,255,.25) 50%,transparent 60%);mix-blend-mode:screen;transform:translateX(-120%);animation:shine 4s ease-in-out infinite}
+@keyframes shine{0%{transform:translateX(-120%)}50%{transform:translateX(120%)}100%{transform:translateX(120%)}}
+
+/* Chips */
+.opts{display:flex;flex-wrap:wrap;gap:12px;margin-top:6px}
+.opts .chip{border:1px solid var(--line);padding:12px 16px;border-radius:999px;cursor:pointer;background:#0b0d11;transition:.15s}
+.opts .chip:active{transform:scale(.98)}
+.opts .chip.active{background:linear-gradient(180deg,var(--brand1),var(--brand2));color:#151515;border:0;font-weight:900;box-shadow:0 6px 24px rgba(244,210,126,.35)}
+
+/* Intro splash (7s + 1s fade) */
+.splash{position:fixed;inset:0;background:radial-gradient(1200px 400px at 50% -10%,rgba(244,210,126,.16),transparent 60%),#000;
+display:grid;place-items:center;z-index:50;animation:fadeOut 1s ease 7s forwards}
+@keyframes fadeOut{to{opacity:0;visibility:hidden}}
+.splash .inner{display:flex;flex-direction:column;align-items:center;gap:10px}
+.bigText{font-weight:900;font-size:44px;letter-spacing:1px;background:linear-gradient(180deg,#fff,#f7e3a1,#b6862e);-webkit-background-clip:text;background-clip:text;color:transparent;
+text-shadow:0 0 28px rgba(244,210,126,.45)}
+.type{overflow:hidden;white-space:nowrap;border-right:2px solid rgba(244,210,126,.8);width:0;animation:typing 1.6s steps(24,end) .5s forwards, caret .8s step-end infinite 2.1s}
+@keyframes typing{to{width:100%}} @keyframes caret{50%{border-color:transparent}}
+.particles{position:absolute;inset:0;pointer-events:none}
+.particles span{position:absolute;width:6px;height:6px;border-radius:50%;background:radial-gradient(circle at 30% 30%,#fff,rgba(255,255,255,0));box-shadow:0 0 20px rgba(244,210,126,.9)}
+.particles span:nth-child(1){left:20%;top:60%;animation:fly 2.4s linear infinite}
+.particles span:nth-child(2){left:70%;top:30%;animation:fly 2.6s linear infinite .2s}
+.particles span:nth-child(3){left:45%;top:75%;animation:fly 2.8s linear infinite .4s}
+@keyframes fly{0%{transform:translateY(0) scale(1);opacity:1}100%{transform:translateY(-90px) scale(0.6);opacity:0}}
+.splash .skip{position:absolute;bottom:24px;font-size:12px;color:#ddd;opacity:.8}
+
+/* Processing overlay */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;z-index:60}
+.overlay .box{background:#0f1115;border:1px solid var(--line);border-radius:16px;padding:18px;text-align:center;min-width:260px}
+.spinner{width:52px;height:52px;border:4px solid rgba(244,210,126,.25);border-top-color:var(--brand1);border-radius:50%;animation:spin 1s linear infinite;margin:12px auto}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+@media(max-width:780px){.grid2{grid-template-columns:1fr} .title{font-size:32px}}
+</style>
+</head>
+<body>
+<div class="splash" id="splash" onclick="this.style.display='none'">
+  <div class="particles"><span></span><span></span><span></span></div>
+  <div class="inner">
+    <div class="bigText">ALIFABRIK</div>
+    <div class="bigText type">VİDEO ASİSTANI</div>
+    <div class="spinner"></div>
+    <div class="skip">dokun ve geç</div>
+  </div>
+</div>
+
+<div class="overlay" id="overlay">
+  <div class="box">
+    <div class="spinner"></div>
+    <div id="ovText" style="color:var(--ink)">İşleniyor...</div>
+  </div>
+</div>
+
+<div class="wrap">
+  <header class="banner">
+    <div class="title">ALIFABRIK VİDEO ASİSTANI</div>
+  </header>
+
+  <section class="card">
+    <div class="grid2">
+      <div>
+        <label>Video yükle</label>
+        <input id="file" type="file" accept="video/*">
+      </div>
+      <div>
+        <label>Ön izleme</label>
+        <video id="preview" class="video" controls></video>
+      </div>
+    </div>
+
+    <div class="grid2" style="margin-top:12px">
+      <div>
+        <label style="display:block;margin-bottom:6px"><strong>Video kısalt</strong> (süre seç)</label>
+        <div class="opts" id="secOpts"></div>
+      </div>
+      <div>
+        <label>Kalite & Çerçeve</label>
+        <div class="grid2">
+          <select id="quality"><option value="720">720p</option><option value="1080" selected>1080p</option><option value="1440">1440p</option></select>
+          <select id="aspect"><option value="9:16">Reels (9:16)</option><option value="16:9">Yatay (16:9)</option><option value="1:1">Kare (1:1)</option><option value="4:5">Instagram 4:5</option></select>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px">
+      <button class="btn" id="buildBtn" disabled>Oluştur</button>
+      <button class="btn ghost" id="previewBtn" disabled>Ön İzle</button>
+      <button class="btn ghost" id="downloadBtn" disabled>İndir</button>
+      <span id="status" class="note" style="align-self:center"></span>
+    </div>
+  </section>
+
+  <section class="card">
+    <label>Çıktı ön izleme</label>
+    <video id="outVideo" class="video" controls></video>
+  </section>
+
+  <footer class="note" style="text-align:center;margin:16px 0">© 2025 ALIFABRIK — Basit tek dosya v11</footer>
+</div>
+
+<script>
+const $=q=>document.querySelector(q);
+/* Hide splash after 7s (tap-to-skip exists) */
+window.addEventListener('load',()=> setTimeout(()=> { const s=$('#splash'); if(s) s.style.display='none'; },7000) );
+
+/* Duration chips */
+const secList=[5,10,15,20,25,30,35];
+const secWrap=$('#secOpts'); let selSec=15;
+secList.forEach(s=>{ const b=document.createElement('button'); b.className='chip'; b.textContent=s+' sn'; b.addEventListener('click',()=>{ selSec=s; [...secWrap.children].forEach(x=>x.classList.remove('active')); b.classList.add('active'); }); if(s===selSec) b.classList.add('active'); secWrap.appendChild(b); });
+
+/* FFmpeg dynamic loader with multi-CDN fallback */
+let ffmpegInstance=null, ffmpegLoading=false;
+async function loadFFmpegScript(){
+  if (window.FFmpeg) return true;
+  const urls=[
+    "https://unpkg.com/@ffmpeg/ffmpeg@0.12.6/dist/ffmpeg.min.js",
+    "https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.6/dist/ffmpeg.min.js",
+    "https://fastly.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.6/dist/ffmpeg.min.js"
+  ];
+  for (const src of urls){
+    try{
+      await new Promise((resolve, reject)=>{
+        const s=document.createElement('script');
+        s.src=src; s.async=true; s.onload=()=>resolve(); s.onerror=()=>reject();
+        document.head.appendChild(s);
+      });
+      if (window.FFmpeg) return true;
+    }catch(e){ /* try next */ }
+  }
+  return false;
+}
+async function getFF(){
+  if (ffmpegInstance) return ffmpegInstance;
+  if (ffmpegLoading){ while(!ffmpegInstance) await new Promise(r=>setTimeout(r,120)); return ffmpegInstance; }
+  ffmpegLoading=true;
+  const ok=await loadFFmpegScript();
+  if(!ok) throw new Error("FFmpeg kütüphanesi indirilemedi (CDN erişimi engelli olabilir).");
+  const { createFFmpeg } = window.FFmpeg;
+  const ff=createFFmpeg({log:false}); await ff.load(); ffmpegInstance=ff; return ff;
+}
+
+/* Global state */
+let file=null, generated=null, bestStart=0;
+function setButtons(on){ ['buildBtn','previewBtn','downloadBtn'].forEach(id=>{ const el=document.getElementById(id); el.disabled=!on; }); }
+
+$('#file').addEventListener('change', async e=>{ file=e.target.files?.[0]||null; generated=null; if(!file){ setButtons(false); return; }
+  $('#preview').src=URL.createObjectURL(file); setButtons(true);
+  $('#status').textContent='Analiz ediliyor (en vurucu pencere)...'; await autoBestStart(); $('#status').textContent='Hazır.';
+});
+
+async function autoBestStart(){
+  try{ const ctx=new (window.AudioContext||window.webkitAudioContext)(); const buf=await ctx.decodeAudioData(await file.arrayBuffer()); const ch=buf.getChannelData(0), sr=buf.sampleRate;
+    const win=Math.floor(Math.min(5,selSec)*sr), hop=Math.floor(0.5*sr); let best=0,bestR=0; for(let i=0;i+win<ch.length;i+=hop){ let s=0; for(let j=0;j<win;j++){const v=ch[i+j]; s+=v*v;} const rms=Math.sqrt(s/win); if(rms>bestR){bestR=rms; best=i;} } bestStart=best/sr;
+  }catch(e){ bestStart=0; }
+}
+
+/* Build & buttons */
+async function buildOnce(){
+  try{
+    if(!file){ alert('Önce video yükle.'); return; }
+    document.getElementById('overlay').style.display='flex'; document.getElementById('ovText').textContent='FFmpeg yükleniyor...';
+    const ffmpeg=await getFF();
+    const inName='in.mp4'; ffmpeg.FS('writeFile',inName,new Uint8Array(await file.arrayBuffer()));
+    const q=parseInt(document.getElementById('quality').value,10); const aspect=document.getElementById('aspect').value;
+    const vf=buildVF(aspect,q);
+    const outName="alifabrik_"+q+"p_"+aspect.replace(':','-')+"_"+selSec+"s.mp4";
+    document.getElementById('ovText').textContent='İşleniyor...';
+    await ffmpeg.run('-ss', String(bestStart), '-t', String(selSec), '-i', inName, '-vf', vf, '-r','30', '-c:v','libx264','-preset','faster','-crf','22', '-c:a','aac','-b:a','128k','-movflags','+faststart', outName);
+    const out=ffmpeg.FS('readFile', outName); const blob=new Blob([out.buffer],{type:'video/mp4'}); const url=URL.createObjectURL(blob);
+    generated={url,name:outName}; document.getElementById('outVideo').src=url; document.getElementById('status').textContent='Hazır.';
+  }catch(err){ console.error(err); alert('Hata: '+(err?.message||err)); } finally{ document.getElementById('overlay').style.display='none'; }
+}
+document.getElementById('buildBtn').addEventListener('click', async()=>{ await buildOnce(); });
+document.getElementById('previewBtn').addEventListener('click', async()=>{ if(!generated) await buildOnce(); if(generated) document.getElementById('outVideo').src=generated.url; });
+document.getElementById('downloadBtn').addEventListener('click', async()=>{ if(!generated) await buildOnce(); if(generated){ const a=document.createElement('a'); a.href=generated.url; a.download=generated.name; document.body.appendChild(a); a.click(); a.remove(); } });
+
+/* Filter chain */
+function buildVF(aspect,q){
+  const size=(a,q)=>{
+    let w=1920,h=1080;
+    if(a==='16:9'){ w=(q===720?1280:q===1080?1920:2560); h=(q===720?720:q===1080?1080:1440); }
+    else if(a==='9:16'){ w=(q===720?720:q===1080?1080:1440); h=(q===720?1280:q===1080?1920:2560); }
+    else if(a==='1:1'){ w=(q===720?720:q===1080?1080:1440); h=w; }
+    else if(a==='4:5'){ w=(q===720?576:q===1080?864:1152); h=(q===720?720:q===1080?1080:1440); }
+    return {w:2*Math.round(w/2),h:2*Math.round(h/2)};
+  };
+  const {w,h}=size(aspect,q); const ar=(w/h).toFixed(6);
+  return "scale='if(lte(a,"+ar+"),-2,"+h+")':'if(lte(a,"+ar+"),"+w+",-2)',pad="+w+":"+h+":(ow-iw)/2:(oh-ih)/2:black";
+}
+</script>
+</body>
+</html>
